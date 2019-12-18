@@ -7,7 +7,8 @@ This application is used to calculate project price based on policy.
 In this app we are calculating total price of projects with different policies  like 'Fixed', 'Flexible', 'Prestige' and we need calculate margin according to the policy. 
 
 ```
-total_price = base_price.to_i + @policy.margin
+policy = PricingPolicy.find_by_name(pricing_policy)
+self.total_price = base_price.to_i + (policy ? policy.margin : 0)
 ```
 Look at the lib folder, Create PricingPolicy Library that is used to calculate margin according to the policy we set in the project. 
 * FindByName method is used create the policy and find the policy by name.  
@@ -36,7 +37,13 @@ rails db:migrate
 ```
 ## Running the tests
 
-Add rspec gem to test the total_price of project and run command to check the spec
+Add rspec gem to test the total_price of project
+
+Write spec of model to set the total price with params pricing_policy and base_price.
+* Right now suppose, if user provide Invalid Policy it create project with base_price.
+* Change 'Flexible' policy url in pricing_policy.rb according to url subdomain. 
+
+Run command to check the spec
 ```
 rspec ./spec/models/project_spec.rb
 ```
